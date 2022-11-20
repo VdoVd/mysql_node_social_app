@@ -1,8 +1,9 @@
-import mysql from 'mysql'
+const mysql = require('mysql')
 
-export const db = mysql.createConnection({
-    host:'localhost',
+const db = mysql.createConnection({
+    host:'192.168.234.150',
     user: 'root',
     password: '123456',
     database:'social'
 })
+module.exports={db}

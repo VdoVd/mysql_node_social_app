@@ -1,21 +1,21 @@
-import {db} from '../connect.js'
-
-export const register = (req,res)=>{
+const {db} = require('../connect.js')
+const {bcrypt} = require('bcryptjs')
+const register = (req,res)=>{
     console.log('')
 
     //check user if exist
-    const q = 'select from users where username=?'
+    const q = 'select * from users where username=?'
 
-    db.query(q,[req.body.username],(err,data)=>{
+    db.query(q,[req.body.email,req.body.username],(err,data)=>{
         if(err) return res.status(500).json(err)
-        if(data.length)return res.status(400).json('user already exists!')
+        if(data.length)return res.status(409).json('user already exists!')
         //create a new user
         const salt = bcrypt.genSaltSync(10)
-        const hashedPassword = bcrypt.hashSync(req.body.pasword,salt)
-        
+        const hashedPassword = bcrypt.hashSync(req.body.password,salt)
+
         const q = "insert into users (`username`,`email`,`password`,`name`) VALUE (?)"
 
-        const values = [req.body.username,req.body.email,hashedPassword,req.body.name]
+        const values = [req.body.username,req.body.email,hashedPassword]
 
         db.query(q,[values],(err,data)=>{
             if(err)return res.status(500).json(err)
@@ -26,9 +26,10 @@ export const register = (req,res)=>{
 
 }
 
-export const login = (req,res)=>{
+ const login = (req,res)=> {
+
+ }
+ const logout = (req,res)=>{
 
 }
-export const logout = (req,res)=>{
-
-}
+module.exports = {register,login,logout}
